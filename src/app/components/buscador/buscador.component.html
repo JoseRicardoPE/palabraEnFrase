@@ -1,0 +1,49 @@
+<form class="mt-4" action="" [formGroup]="searcherForm" (ngSubmit)="searchWordPhrase()">
+    <div class="">
+        <label class="d-block mb-1" for="inputText">Ingrese una frase:</label>
+        <input class="w-100"
+            type="text" 
+            name="inputText" 
+            id="inputText"
+            formControlName="inputText"
+            (blur)="checkInputsInteraction()"
+        >
+    </div>
+    <ng-container *ngIf="inputsInteraction && searcherForm.get('inputText')?.hasError('required') && searcherForm.get('inputText')?.touched">
+        <div class="text-danger">
+            <span>¡La frase es <strong>obligatoria</strong>!</span>
+        </div>
+    </ng-container>
+    <div class="mt-2">
+        <label class="d-block mb-1" for="inputWord">Ingrese una palabra a buscar:</label>
+        <input class="w-100"
+            type="text" 
+            name="inputWord" 
+            id="inputWord"
+            formControlName="inputWord"
+            (blur)="checkInputsInteraction()"
+        >
+    </div>
+    <ng-container *ngIf="inputsInteraction && searcherForm.get('inputWord')?.hasError('required') && searcherForm.get('inputWord')?.touched">
+        <div class="text-danger">
+            <span>¡La palabra es <strong>obligatoria</strong>!</span>
+        </div>
+    </ng-container>
+    <div class="mt-4">
+        <button class="me-3 btn btn-primary btn-sm fw-bold" type="submit" [disabled]="searcherForm.invalid">Buscar</button>
+        <button class="btn btn-warning btn-sm fw-bold" type="button" (click)="resetInput()">Nueva busqueda</button>
+    </div>
+</form>
+<div *ngIf="showMessage" class="mt-4">
+    <ng-container *ngIf="searcherForm.valid && counter === 1">
+        <span>La palabra <strong>"{{ searcherForm.value.inputWord }}"</strong> se repite {{ counter }} vez en la frase <strong>"{{ searcherForm.value.inputText }}"</strong></span>
+    </ng-container>
+    <ng-container *ngIf="searcherForm.valid && counter > 1; else wordNotFound">
+        <span>La palabra <strong>"{{ searcherForm.value.inputWord }}"</strong> se repite {{ counter }} veces en la frase <strong>"{{ searcherForm.value.inputText }}"</strong></span>
+    </ng-container>
+    <ng-template #wordNotFound>
+        <ng-container *ngIf="searcherForm.valid && !counter">
+            <span>La palabra <strong>"{{ searcherForm.value.inputWord }}"</strong> no se encuentra en la frase <strong>"{{ searcherForm.value.inputText }}"</strong></span>
+        </ng-container>
+    </ng-template>
+</div>
